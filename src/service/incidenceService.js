@@ -9,3 +9,8 @@ export function getAllIncidence() {
     let url = 'incidence/getAll'
     return axios.get(url)
 }
+
+export function deleteIncidence(payload) {
+    let url = `incidence/deleteById/${payload}`
+    return axios.delete(url)
+}

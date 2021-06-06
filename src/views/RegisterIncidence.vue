@@ -55,14 +55,20 @@
                 <b-button class="incidence-create-btn" variant="primary" @click="cadastrar">Cadastrar</b-button>
             </div>
             <div id="incidence_table">
-                <b-table striped :items="incidenceItems"></b-table>
+                <b-table :busy="isBusy" :fields="incidenceFields" :items="incidenceItems">
+                    <template #cell(ações)="row">
+                        <b-button size="sm" @click="excluir(row.item.id)" class="mr-1" variant="danger">
+                            Excluir
+                        </b-button>
+                    </template>
+                </b-table>
             </div>
         </b-card>
   </div>
 </template>
 
 <script>
-import { getAllIncidence, insertIncidence } from '../service/incidenceService.js'
+import { deleteIncidence, getAllIncidence, insertIncidence } from '../service/incidenceService.js'
 import { getAllDisease } from '../service/diseaseService.js'
 import { getAllUsers } from '../service/accountService.js'
 
@@ -81,10 +87,39 @@ export default {
             diseaseOptions: [
             ],
             incidenceDate: '',
-            incidenceItems: []
+            incidenceItems: [],
+            isBusy: false,
+            incidenceFields: [
+                {key: 'id', label: 'ID'},
+                {key: 'doença', label: 'Doença'},
+                {key: 'usuário', label: 'Usuário'},
+                {key: 'registro', label: 'Registro'},
+                {key: 'ações', label: 'Ações'}
+            ]
         }
     },
     methods: {
+        excluir(item) {
+            this.$swal.fire({
+                icon: 'info',
+                text: 'Deseja realmente excluir o registro?',
+                showCancelButton: true,
+                confirmButtonText: `Sim`,
+            }).then(res => {
+                if (res.isConfirmed) {
+                    deleteIncidence(item).then(() => {
+                        this.fillIncidence()
+                    }).catch(() => {
+                        this.$swal.fire({
+                            icon: 'error',
+                            title: 'Incidência não foi excluida!',
+                            text: "A incidência não foi excluida, tente novamente.",
+                            confirmButtonText: `Ok`,
+                        })
+                    })
+                }
+            })
+        },
         cadastrar() {
             insertIncidence({
                 disease: { id: this.diseaseSelected.id },
@@ -108,9 +143,18 @@ export default {
              })
         },
         fillIncidence() {
+            this.isBusy = true
             getAllIncidence().then(res => {
-                this.incidenceItems = res.data.map(item => { return {doença: item.disease.name, usuário: item.user.name, registro: this.$moment(item.incidenceDate, "YYYY-MM-DD").format("DD/MM/YYYY")} })
+                this.incidenceItems = res.data.map(item => { return {
+                    id: item.id,
+                    doença: item.disease.name, 
+                    usuário: item.user.name, 
+                    registro: this.$moment(item.incidenceDate, "YYYY-MM-DD").format("DD/MM/YYYY"),
+                    ações: null
+                }})
+                this.isBusy = false
             }).catch(() => {
+                this.isBusy = false
                 this.$swal.fire({
                     icon: 'error',
                     title: 'Oops...',

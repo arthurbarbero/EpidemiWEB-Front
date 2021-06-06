@@ -11,7 +11,7 @@
         <b-button size="lg" class="btns" @click="routerPush('RegisterAgent')"> Cadastre um novo agente</b-button>
       </div>
       <div id="incidences-view" class="col-12 col-sm-12 col-md-12 col-lg-10 col-xl-10">
-        <b-table striped :items="items"></b-table>
+        <b-table :fields="fields" striped :items="items"></b-table>
       </div>
     </div>
   </div>
@@ -26,7 +26,12 @@ export default {
   },
   data() {
     return {
-      items: []
+      items: [],
+      fields: [
+        {key: 'doença', label: 'Doenças'},
+        {key: 'ocorrências', label: 'Ocorrências'},
+        {key: 'último_registro', label: 'Último Registro'}
+      ]
     }
   },
   methods: {

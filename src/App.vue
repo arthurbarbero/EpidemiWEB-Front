@@ -17,7 +17,7 @@
       </div>
     </div>
     <div id="footer" v-if="this.$store.state.isLogged">
-      Esse é o footer
+      EpidemiWEB - Sistema de Coleta e Visualização de Dados Epidemiológicos
     </div>
   </div>
 </template>
