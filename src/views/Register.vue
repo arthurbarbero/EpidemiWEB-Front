@@ -111,11 +111,6 @@ export default {
         register() {
             axios.post("user/registerUser", { 
                 user: this.user, address: this.address, role: this.role 
-                },
-                {
-                    headers: {
-						'Content-Type': 'application/json'
-					}
                 }
             ).then(() => {
                 this.$swal.fire({
@@ -130,7 +125,6 @@ export default {
                         }
                     })
                 })
-
             }).catch(() => {
                 this.$swal.fire({
                     icon: 'error',
