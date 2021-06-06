@@ -30,6 +30,7 @@
 <script>
 import axios from "axios"
 import { mapMutations } from "vuex"
+import { authenticate } from '../service/accountService.js'
 
 	export default {
 		mounted() {
@@ -45,7 +46,7 @@ import { mapMutations } from "vuex"
 		},
 		methods: {
 			login() {
-				axios.post("login/", this.data).then(res => {
+				authenticate(this.data).then(res => {
 					axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.tokenKey}`
 					this.setToken(res.data.tokenKey)
 					this.setGroups(res.data.groups)
@@ -64,7 +65,6 @@ import { mapMutations } from "vuex"
 			},
 			registered() {
 				if (this.$route.params) {
-					console.log(this.$route.params)
 					this.email = this.$route.params.email
 					this.password = this.$route.params.password
 				}
