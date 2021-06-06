@@ -23,14 +23,22 @@
                     <div class="col-md-8">
                         <label for="">Doenças:</label>
                         <div>
-                            <multiselect track-by="name" label="name" :searchable="true" :multiple="true" v-model="dataDisease" :options="options"></multiselect>
+                            <multiselect 
+                                track-by="name" 
+                                :close-on-select="false" 
+                                label="name" 
+                                :searchable="true" 
+                                :multiple="true" 
+                                v-model="dataDisease" 
+                                :options="options"
+                            ></multiselect>
                         </div>
                     </div>
 
                     <div class="col-md-4">
                         <label for="">Severidade:</label>
                         <b-input-group>
-                            <b-form-input v-model="data.severity" type="number"></b-form-input>
+                            <b-form-input v-model="data.severity" number type="number"></b-form-input>
                         </b-input-group>
                     </div>
                 </div>
@@ -45,7 +53,7 @@
 </template>
 
 <script>
-import { getAllDisease } from '@/service/diseaseService';
+import { getAllDisease, insertDisease } from '@/service/diseaseService';
 
 export default {
     data() {
@@ -54,7 +62,7 @@ export default {
                 name: null,
                 description: null,
                 severity: null,
-                disease: []
+                diseases: []
             },
             dataDisease: [],
             options: []
@@ -72,10 +80,23 @@ export default {
             });
         },
         registerDisease() {
-            console.log('teste');
+            this.data.disease = this.dataDisease.map(result => result.value);
+
+            insertDisease(this.data)
+            .then(() => {
+                this.$router.push({ name: 'Home' })
+            })
+            .catch(error => {
+                this.$swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: error.message,
+                    confirmButtonText: `Ok`,
+                })
+            })
         },
         back() {
-
+            this.$router.push({ name: 'Home' });
         }
     },
     mounted() {

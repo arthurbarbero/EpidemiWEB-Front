@@ -6,7 +6,7 @@
           EpidemiWEB
         </div>
         <div id="nav-buttons">
-          <b-button variant="outline-light" class="nav-item-btn my-2 my-sm-0">Dashboard</b-button>
+          <b-button variant="outline-light" class="nav-item-btn my-2 my-sm-0" @click="goToDashboard">Dashboard</b-button>
           <b-button variant="outline-light" class="nav-item-btn my-2 my-sm-0" @click="logout">Logout</b-button>
         </div>
       </b-navbar>
@@ -33,7 +33,10 @@ import { mapMutations } from 'vuex'
       },
       ...mapMutations([
         "setIsLogged"
-      ])
+      ]),
+      goToDashboard() {
+        this.$router.push({ name: 'Home' });
+      }
     }
   }
 </script>
