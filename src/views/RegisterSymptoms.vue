@@ -23,14 +23,14 @@
                     <div class="col-md-8">
                         <label for="">Doenças:</label>
                         <div>
-                            <multiselect v-model="data.disease" :options="options"></multiselect>
+                            <multiselect track-by="name" :searchable="true" :multiple="true" v-model="data.disease" :options="options"></multiselect>
                         </div>
                     </div>
 
                     <div class="col-md-4">
                         <label for="">Severidade:</label>
                         <b-input-group>
-                            <b-form-input v-model="data.severity" type="text"></b-form-input>
+                            <b-form-input v-model="data.severity" type="number"></b-form-input>
                         </b-input-group>
                     </div>
                 </div>
@@ -57,7 +57,8 @@ export default {
                 severity: null,
                 disease: []
             },
-            options: [ 'teste1', 'teste2']
+            options: [
+            ]
         }
     },
     components: { Multiselect },
@@ -66,7 +67,7 @@ export default {
             getAllDisease().then((result) => {
                 
                 result.data.forEach(element => {
-                    this.options.push(element.name);
+                    this.options.push({ "name": element.name, "language": element.id });
                 });
             }).catch((err) => {
                 console.log(err);
