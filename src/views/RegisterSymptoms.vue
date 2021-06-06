@@ -46,7 +46,7 @@
             </b-card-text>
             <div id="btn-group" class="flex-column flex-sm-column flex-md-row flex-lg-row flex-xl-row">
                 <b-button class="login-btn" variant="danger" @click="back">Voltar</b-button>
-                <b-button class="login-btn" variant="primary" @click="registerDisease">Cadastrar</b-button>
+                <b-button class="login-btn" variant="primary" @click="registerSympton">Cadastrar</b-button>
             </div>
         </b-card>
     </div>
@@ -87,7 +87,7 @@ export default {
             this.data.diseases = []
             this.dataDisease = []
         },
-        registerDisease() {
+        registerSympton() {
             this.data.diseases = this.dataDisease.map(result => result.value);
 
             insertSympton(this.data)
