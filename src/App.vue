@@ -37,7 +37,7 @@ import { mapMutations } from 'vuex'
     }
   }
 </script>
-
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style>
 #app {
   display: flex;
@@ -89,5 +89,10 @@ import { mapMutations } from 'vuex'
 #footer {
   background: #da7f8f;
   height: 10%;
+}
+
+.multiselect__tags {
+  border-color: #ced4da;
+  padding-top: 5px;
 }
 </style>
