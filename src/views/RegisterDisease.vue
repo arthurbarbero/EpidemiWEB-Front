@@ -11,38 +11,6 @@
                         <b-form-input v-model="data.name"></b-form-input>
                     </b-input-group>
                 </div>
-
-                <div class="input-container">
-                    <label for="">Descrição:</label>
-                    <b-input-group>
-                        <b-form-input v-model="data.description" type="text"></b-form-input>
-                    </b-input-group>
-                </div>
-
-                <div class="flex row p-2">
-                    <div class="col-md-8">
-                        <label for="">Doenças:</label>
-                        <div>
-                            <multiselect 
-                                track-by="name" 
-                                :close-on-select="false" 
-                                label="name" 
-                                :searchable="true" 
-                                :multiple="true" 
-                                v-model="dataDisease" 
-                                :options="options"
-                            ></multiselect>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label for="">Severidade:</label>
-                        <b-input-group>
-                            <b-form-input v-model="data.severity" number type="number"></b-form-input>
-                        </b-input-group>
-                    </div>
-                </div>
-
             </b-card-text>
             <div id="btn-group" class="flex-column flex-sm-column flex-md-row flex-lg-row flex-xl-row">
                 <b-button class="login-btn" variant="danger" @click="back">Voltar</b-button>
@@ -80,15 +48,9 @@ export default {
                 console.log(err);
             });
         },
-        resetInputData() {
-            this.data.name = null
-            this.data.description = null
-            this.data.severity = null
-            this.data.diseases = []
-            this.dataDisease = []
-        },
+        
         registerDisease() {
-            this.data.diseases = this.dataDisease.map(result => result.value);
+            this.data.disease = this.dataDisease.map(result => result.value);
 
             insertSympton(this.data)
             .then(() => {
