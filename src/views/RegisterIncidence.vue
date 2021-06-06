@@ -10,20 +10,37 @@
                     <div class="newIncidence-input-item">
                         <label for="user_selected">Usuário:</label>
                         <b-input-group>
-                            <b-form-select id="user_selected" class="newIncidence-select-tag" :options="userOptions" v-model="userSelected" />
+                            <multiselect 
+                                id="user_selected"
+                                class="newIncidence-select-tag" 
+                                :options="userOptions" 
+                                label="name" 
+                                placeholder="Selecione um Usuário" 
+                                track-by="name"
+                                :selectLabel="null"
+                                :deselectLabel="null"
+                                v-model="userSelected" />
                         </b-input-group>
                     </div>
                     <div class="newIncidence-input-item">
                         <label for="disease_selected">Doença:</label>
                         <b-input-group>
-                            <b-form-select id="disease_selected" class="newIncidence-select-tag" :options="diseaseOptions" v-model="diseaseSelected" />
+                            <multiselect 
+                                id="disease_selected" 
+                                class="newIncidence-select-tag" 
+                                :options="diseaseOptions" 
+                                label="name" 
+                                placeholder="Selecione uma Doença" 
+                                track-by="name"
+                                :selectLabel="null"
+                                :deselectLabel="null"
+                                v-model="diseaseSelected" />
                         </b-input-group>
                     </div>
                     <div class="newIncidence-input-item">
-                        <label for="incidence_date">Email:</label>
+                        <label for="incidence_date">Data da Incidencia:</label>
                         <b-input-group>
                             <b-form-datepicker 
-                                size="sm" 
                                 id="incidence_date" 
                                 locale="pt-br" 
                                 v-model="incidenceDate" 
@@ -33,31 +50,35 @@
                         </b-input-group>
                     </div>
                 </div>
-                <div id="btn-group" class="flex-column flex-sm-column flex-md-row flex-lg-row flex-xl-row">
-                    <b-button class="incidence-create-btn" variant="primary" @click="cadastrar">Entrar</b-button>
-                </div>
             </b-card-text>
-            <b-table striped :items="incidenceItems"></b-table>
+            <div id="btn-group" class="flex-column flex-sm-column flex-md-row flex-lg-row flex-xl-row">
+                <b-button class="incidence-create-btn" variant="primary" @click="cadastrar">Cadastrar</b-button>
+            </div>
+            <div id="incidence_table">
+                <b-table striped :items="incidenceItems"></b-table>
+            </div>
         </b-card>
   </div>
 </template>
 
 <script>
 import { getAllIncidence, insertIncidence } from '../service/incidenceService.js'
+import { getAllDisease } from '../service/diseaseService.js'
+import { getAllUsers } from '../service/accountService.js'
 
 export default {
     mounted() {
         this.fillIncidence()
+        this.fillDiseases()
+        this.fillUser()
     },
     data() {
         return {
             userSelected: null,
             userOptions: [
-                { value: null, text: 'Selecione um Usuário', disabled:true},
             ],
             diseaseSelected: null,
             diseaseOptions: [
-                { value: null, text: 'Selecione uma Doença', disabled:true},
             ],
             incidenceDate: '',
             incidenceItems: []
@@ -66,8 +87,8 @@ export default {
     methods: {
         cadastrar() {
             insertIncidence({
-                disease: { id: this.diseaseSelected },
-                user: { id: this.userSelected },
+                disease: { id: this.diseaseSelected.id },
+                user: { id: this.userSelected.id },
                 incidenceDate: this.incidenceDate
             }).then(() => { 
                 this.$swal.fire({
@@ -94,6 +115,32 @@ export default {
                     icon: 'error',
                     title: 'Oops...',
                     text: "Não foi possível pegar todas as incidências, tente novamente.",
+                    confirmButtonText: `Ok`,
+                })
+            })
+        },
+        fillDiseases() {
+            getAllDisease().then(res => { 
+                console.log(res)
+                this.diseaseOptions = res.data.map(item => { return { id: item.id, name: item.name }})
+            }).catch(()=> {
+                this.$swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: "Não foi possível pegar todas as doenças, tente novamente.",
+                    confirmButtonText: `Ok`,
+                })
+            })
+        },
+        fillUser() {
+            getAllUsers().then(res => { 
+                console.log(res)
+                this.userOptions = res.data.map(item => { return { id: item.id, name: item.name }})
+            }).catch(()=> {
+                this.$swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: "Não foi possível pegar todas as doenças, tente novamente.",
                     confirmButtonText: `Ok`,
                 })
             })
@@ -148,11 +195,17 @@ export default {
 		margin-bottom: 5px;
 	}
 
-.btn-group {
+#btn-group {
     display: flex;
 	flex-direction: row;
 	justify-content: center;
 	align-content: center;
+}
+
+#incidence_table {
+    margin-top: 20px;
+    max-height: 250px;
+    overflow: auto;
 }
 
 .incidence-create-btn {

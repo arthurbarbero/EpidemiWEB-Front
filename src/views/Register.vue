@@ -110,7 +110,7 @@ export default {
     methods: {
         register() {
             axios.post("user/registerUser", { 
-                user: this.user, address: this.address, role: this.role 
+                user: this.user, address: this.address, role: this.$store.state.groups.includes("ROLE_HEALTH_AGENT") ? "ROLE_HEALTH_AGENT" : this.role  
                 }
             ).then(() => {
                 this.$swal.fire({
