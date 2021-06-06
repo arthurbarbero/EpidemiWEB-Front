@@ -8,11 +8,11 @@
 		<b-card-text >
 			<label class="" for="user_email">Email:</label>
 			<b-input-group>
-				<b-form-input v-model="email"></b-form-input>
+				<b-form-input v-model="data.email"></b-form-input>
 			</b-input-group>
 			<label for="user_password">Senha:</label>
 			<b-input-group>
-				<b-form-input v-model="password" type="password"></b-form-input>
+				<b-form-input v-model="data.password" type="password"></b-form-input>
 			</b-input-group>
 		</b-card-text>
     <b-button variant="primary" @click="login">Entrar</b-button>
@@ -27,22 +27,16 @@ import { mapMutations } from "vuex"
 	export default {
 		data() {
 			return {
-				email: "",
-				password: ""
+				data: {
+					email: "",
+					password: ""
+				}
 			}
 		},
 		methods: {
 			login() {
-				axios.post("login/",
-				{ 
-					email: this.email,
-					password: this.password
-				},
-				{ 
-					headers: {
-						'Content-Type': 'application/json'
-					}
-				}).then(res => {
+				axios.post("login/", this.data).then(res => {
+					axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.tokenKey}`
 					this.setToken(res.data.tokenKey)
 					this.setGroups(res.data.groups)
 					this.$router.push({name: 'Home'})

@@ -11,6 +11,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'sweetalert2/dist/sweetalert2.min.css';
 
 axios.defaults.baseURL= 'http://localhost:8082/api/'
+axios.defaults.common['Content-Type'] = 'application/json'
 
 
 Vue.use(BootstrapVue)
