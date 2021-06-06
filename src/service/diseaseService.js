@@ -6,6 +6,11 @@ export function getAllDisease() {
 }
 
 export function insertDisease(data) {
-    let url = "symptom/register";
+    let url = "disease/register";
     return axios.post(url, data)
+}
+
+export function deleteDisease(id) {
+    let url = `disease/deleteById/${id}`;
+    return axios.delete(url)
 }

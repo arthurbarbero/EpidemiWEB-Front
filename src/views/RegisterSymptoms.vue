@@ -19,7 +19,6 @@
                         </b-input-group>
                     </div>
                 </div>
-
                 <div class="flex row px-1">
                     <div class="col-md-8 px-1">
                         <label for="">Doenças:</label>
@@ -35,7 +34,6 @@
                             ></multiselect>
                         </div>
                     </div>
-
                     <div class="col-md-2 px-1">
                         <label for="">Severidade:</label>
                         <b-input-group>
@@ -46,9 +44,7 @@
                         <b-button class="login-btn" variant="primary" @click="registerDisease">Cadastrar</b-button>
                     </div>
                 </div>
-
             </b-card-text>
-            
             <div id="symptom_table">
             <b-table :busy="isBusy" :fields="symptomFields" :items="symptomItems">
                 <template #cell(ações)="row">
@@ -136,7 +132,7 @@ export default {
             getAllDisease().then((result) => {
                 
                 result.data.forEach(element => {
-                    this.options.push({ "name": element.name, "value": element.id });
+                    this.options.push({ "name": element.name, "value": element.id })
                 });
             }).catch(() => {
                 this.$swal.fire({
@@ -154,12 +150,13 @@ export default {
             this.data.diseases = []
             this.dataDisease = []
         },
-        registerDisease() {
-            this.data.diseases = this.dataDisease.map(result => result.value);
+        registerSympton() {
+            this.data.diseases = this.dataDisease.map(result => result.value)
 
             insertSympton(this.data)
             .then(() => {
-                this.resetInputData();
+                this.resetInputData()
+                this.fillSymptomTable()
             })
             .catch(() => {
                 this.$swal.fire({

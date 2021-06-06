@@ -1,7 +1,7 @@
 <template>
     <div id="register-content">
 		<b-card
-			title="Cadastro de Sintoma"
+			title="Cadastro de Doença"
 			class="mb-2 container"
 		>
             <b-card-text >
@@ -13,36 +13,66 @@
                 </div>
             </b-card-text>
             <div id="btn-group" class="flex-column flex-sm-column flex-md-row flex-lg-row flex-xl-row">
-                <b-button class="login-btn" variant="danger" @click="back">Voltar</b-button>
                 <b-button class="login-btn" variant="primary" @click="registerDisease">Cadastrar</b-button>
             </div>
+
+           <b-table striped :items="diseasesItems">
+                <template #cell(ações)="row">
+                    <b-button size="sm" @click="excluirDiseases(row.item.id)" class="mr-1" variant="danger">
+                        Excluir
+                    </b-button>
+                </template>
+            </b-table>
         </b-card>
     </div>
 </template>
 
 <script>
-import { getAllDisease } from '@/service/diseaseService';
-import { insertSympton } from '@/service/symptonService';
+import { insertDisease, getAllDisease, deleteDisease } from '@/service/diseaseService';
 
 export default {
     data() {
         return {
             data: {
-                name: null,
-                description: null,
-                severity: null,
-                diseases: []
+                name: null
             },
-            dataDisease: [],
-            options: []
+            diseasesItems: []
         }
     },
     methods: {
+        excluirDiseases(id) {
+            this.$swal.fire({
+                icon: 'info',
+                text: 'Deseja realmente excluir o registro?',
+                showCancelButton: true,
+                confirmButtonText: 'Sim',
+            }).then(res => {
+                if (res.isConfirmed) {
+                    deleteDisease(id)
+                    .then(() => {
+                        this.fillDiseases();
+                        this.$swal.fire({
+                            icon: 'success',
+                            title: 'Doença excluida com sucesso !',
+                            confirmButtonText: `Ok`,
+                        })
+                    })
+                    .catch(() => {
+                        this.$swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: "Não foi possivel excluir este registro",
+                            confirmButtonText: `Ok`,
+                        })
+                    })
+                }
+            })
+        },
         fillDiseases() {
             getAllDisease().then((result) => {
-                
+                this.diseasesItems = [];
                 result.data.forEach(element => {
-                    this.options.push({ "name": element.name, "value": element.id });
+                    this.diseasesItems.push({ "id": element.id , "nome": element.name, 'ações': null });
                 });
             }).catch((err) => {
                 console.log(err);
@@ -50,23 +80,24 @@ export default {
         },
         
         registerDisease() {
-            this.data.disease = this.dataDisease.map(result => result.value);
-
-            insertSympton(this.data)
+            insertDisease(this.data)
             .then(() => {
-                this.resetInputData();
-            })
-            .catch(error => {
+                this.data.name = null;
+                this.fillDiseases();
                 this.$swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: error.message,
+                    icon: 'success',
+                    title: 'Cadastrado !',
                     confirmButtonText: `Ok`,
                 })
             })
-        },
-        back() {
-            this.$router.push({ name: 'Home' });
+            .catch(() => {
+                this.$swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: "Não foi possivel realizar o cadastro",
+                    confirmButtonText: `Ok`,
+                })
+            })
         }
     },
     mounted() {
