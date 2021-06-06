@@ -23,7 +23,7 @@
                     <div class="col-md-8">
                         <label for="">Doenças:</label>
                         <div>
-                            <multiselect track-by="name" :searchable="true" :multiple="true" v-model="data.disease" :options="options"></multiselect>
+                            <multiselect track-by="name" label="name" :searchable="true" :multiple="true" v-model="dataDisease" :options="options"></multiselect>
                         </div>
                     </div>
 
@@ -46,7 +46,6 @@
 
 <script>
 import { getAllDisease } from '@/service/diseaseService';
-import Multiselect from 'vue-multiselect'
 
 export default {
     data() {
@@ -57,31 +56,30 @@ export default {
                 severity: null,
                 disease: []
             },
-            options: [
-            ]
+            dataDisease: [],
+            options: []
         }
     },
-    components: { Multiselect },
     methods: {
-        getDiseases() {
+        fillDiseases() {
             getAllDisease().then((result) => {
                 
                 result.data.forEach(element => {
-                    this.options.push({ "name": element.name, "language": element.id });
+                    this.options.push({ "name": element.name, "value": element.id });
                 });
             }).catch((err) => {
                 console.log(err);
             });
         },
         registerDisease() {
-
+            console.log('teste');
         },
         back() {
 
         }
     },
     mounted() {
-        this.getDiseases();
+        this.fillDiseases();
     }
 }
 </script>

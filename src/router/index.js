@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '../store'
+import axios from 'axios'
 
 Vue.use(VueRouter)
 
@@ -50,6 +51,7 @@ router.beforeEach((to, from, next) => {
   } else {
     next()
   }
+  if (store.state.token) axios.defaults.headers.common['Authorization'] = `Bearer ${store.state.token}`
 })
 
 export default router
