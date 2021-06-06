@@ -19,6 +19,11 @@ const routes = [
     path: '/registerSymptom',
     name: 'RegisterSymptom',
     component: () => import('../views/RegisterSymptoms')
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: () => import('../views/Register.vue')
   }
 ]
 
@@ -29,19 +34,15 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (!store.state.isLogged && to.name !== "Login") {
-    console.log("primeiro")
-    console.log(store.state.isLogged)
-    next({ name: "Login" })
-  } else if (to.name === "Login" && store.state.isLogged) {
-    console.log("segundo")
-    console.log(store.state.isLogged)
-
+  if (!store.state.isLogged) {
+    if (to.name === "Login" || to.name === "Register") {
+      next()
+    } else {
+      next({ name : "Login" })
+    }
+  } else if (to.name === "Login" || to.name === "Register") {
     next({ name: "Home" })
   } else {
-    console.log("terceiro")
-    console.log(store.state.isLogged)
-
     next()
   }
 })
