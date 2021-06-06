@@ -41,12 +41,12 @@
                         </b-input-group>
                     </div>
                     <div id="btn-group" class="flex-column flex-sm-column flex-md-row flex-lg-row flex-xl-row col-md-2 px-1 align-items-end">
-                        <b-button class="login-btn" variant="primary" @click="registerDisease">Cadastrar</b-button>
+                        <b-button class="login-btn" variant="primary" @click="registerSymptom">Cadastrar</b-button>
                     </div>
                 </div>
             </b-card-text>
             <div id="symptom_table">
-            <b-table :busy="isBusy" :fields="symptomFields" :items="symptomItems">
+            <b-table :fields="symptomFields" :items="symptomItems">
                 <template #cell(ações)="row">
                     <b-button size="sm" @click="excluir(row.item.id)" class="mr-1" variant="danger">
                         Excluir
@@ -150,13 +150,19 @@ export default {
             this.data.diseases = []
             this.dataDisease = []
         },
-        registerSympton() {
+        registerSymptom() {
             this.data.diseases = this.dataDisease.map(result => result.value)
 
             insertSympton(this.data)
             .then(() => {
-                this.resetInputData()
+                this.$swal.fire({
+                    icon: 'success',
+                    title: 'Sintoma cadastrado!',
+                    confirmButtonText: `Ok`,
+                }).then(() => {
+                    this.resetInputData()
                 this.fillSymptomTable()
+                })
             })
             .catch(() => {
                 this.$swal.fire({

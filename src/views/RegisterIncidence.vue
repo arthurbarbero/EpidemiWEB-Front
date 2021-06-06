@@ -165,7 +165,6 @@ export default {
         },
         fillDiseases() {
             getAllDisease().then(res => { 
-                console.log(res)
                 this.diseaseOptions = res.data.map(item => { return { id: item.id, name: item.name }})
             }).catch(()=> {
                 this.$swal.fire({
@@ -178,7 +177,6 @@ export default {
         },
         fillUser() {
             getAllUsers().then(res => { 
-                console.log(res)
                 this.userOptions = res.data.map(item => { return { id: item.id, name: item.name }})
             }).catch(()=> {
                 this.$swal.fire({

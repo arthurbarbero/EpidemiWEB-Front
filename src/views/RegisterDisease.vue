@@ -16,13 +16,15 @@
                 <b-button class="login-btn" variant="primary" @click="registerDisease">Cadastrar</b-button>
             </div>
 
-           <b-table striped :items="diseasesItems">
-                <template #cell(ações)="row">
-                    <b-button size="sm" @click="excluirDiseases(row.item.id)" class="mr-1" variant="danger">
-                        Excluir
-                    </b-button>
-                </template>
-            </b-table>
+            <div id="diease-table">
+                <b-table striped :items="diseasesItems">
+                    <template #cell(ações)="row">
+                        <b-button size="sm" @click="excluirDiseases(row.item.id)" class="mr-1" variant="danger">
+                            Excluir
+                        </b-button>
+                    </template>
+                </b-table>
+            </div>
         </b-card>
     </div>
 </template>
@@ -135,5 +137,10 @@ export default {
 
     .login-btn {
         margin: 10px;
+    }
+
+    #diease-table {
+        height: 250px;
+        overflow: auto;
     }
 </style>

@@ -28,11 +28,15 @@ import { mapMutations } from 'vuex'
   export default {
     methods: {
       logout() {
+        this.setToken("")
+        this.setGroups([])
         this.setIsLogged(false)
         this.$router.push({ name: "Login" })
       },
       ...mapMutations([
-        "setIsLogged"
+        "setIsLogged",
+        "setToken",
+        "setGroups"
       ]),
       goToDashboard() {
         this.$router.push({ name: 'Home' });

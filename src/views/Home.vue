@@ -10,7 +10,7 @@
         <b-button size="lg" class="btns" @click="routerPush('RegisterIncidence')"> Cadastre uma nova incidencia</b-button>
         <b-button size="lg" class="btns" @click="routerPush('RegisterAgent')"> Cadastre um novo agente</b-button>
       </div>
-      <div id="incidences-view" class="col-12 col-sm-12 col-md-12 col-lg-10 col-xl-10">
+      <div :class="this.$store.state.groups.includes('ROLE_HEALTH_AGENT') ? 'incidences-view' : 'incidences-view-2' " class="col-12 col-sm-12 col-md-12 col-lg-10 col-xl-10">
         <b-table :fields="fields" striped :items="items"></b-table>
       </div>
     </div>
@@ -44,7 +44,12 @@ export default {
           return {
             doença: disease.name,
             ocorrências: disease.incidences.length,
-            último_registro: this.$moment(disease.incidences.sort((a, b) => this.$moment(a.incidenceDate, "YYYY-MM-DD") < this.$moment(b.incidenceDate, "YYYY-MM-DD") ? 1 : -1)[0].incidenceDate, "YYYY-MM-DD").format("DD/MM/YYYY")
+            último_registro: disease.incidences.length > 0 ? 
+				this.$moment(
+					disease.incidences.sort(
+						(a, b) => this.$moment(a.incidenceDate, "YYYY-MM-DD") < this.$moment(b.incidenceDate, "YYYY-MM-DD") ? 1 : -1
+					)[0].incidenceDate, "YYYY-MM-DD").format("DD/MM/YYYY") :
+				"Não há ocorrências"
           }
         })
       }).catch(() => {
@@ -87,9 +92,15 @@ export default {
   width: 300px;
 }
 
-#incidences-view {
+.incidences-view {
   margin-top: 20px;
-  max-height: 250px;
+  height: 250px;
+  overflow: auto;
+}
+
+.incidences-view-2 {
+  margin-top: 20px;
+  height: 430px;
   overflow: auto;
 }
 </style>
