@@ -10,7 +10,7 @@
         <b-button size="lg" class="btns" @click="routerPush('RegisterIncidence')"> Cadastre uma nova incidencia</b-button>
         <b-button size="lg" class="btns" @click="routerPush('RegisterAgent')"> Cadastre um novo agente</b-button>
       </div>
-      <div :class="this.$store.state.groups.includes('ROLE_HEALTH_AGENT') ? 'incidences-view' : 'incidences-view-2' " class="col-12 col-sm-12 col-md-12 col-lg-10 col-xl-10">
+      <div :class="this.$store.state.groups.includes('ROLE_HEALTH_AGENT') ? 'incidences-view' : 'incidences-view-2'" class="col-12 col-sm-12 col-md-12 col-lg-10 col-xl-10">
         <b-table :fields="fields" striped :items="items"></b-table>
       </div>
     </div>
